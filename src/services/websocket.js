@@ -27,7 +27,7 @@ export const connectWebSocket = ({
     // Creates WebSocket connection to Spring Boot
     // ──────────────────────────────────────────
     webSocketFactory: () =>
-      new SockJS('http://localhost:8080/ws'),
+      new SockJS(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/ws`),
 
     // ──────────────────────────────────────────
     // Reconnect automatically if connection drops
@@ -46,7 +46,7 @@ export const connectWebSocket = ({
       stompClient.subscribe('/topic/alerts', (message) => {
         try {
           const alert = JSON.parse(message.body)
-          console.log('��� Alert received:', alert.anomalyType)
+          console.log('Alert received:', alert.anomalyType)
           onAlert?.(alert)
         } catch (e) {
           console.error('Failed to parse alert:', e)
@@ -67,7 +67,7 @@ export const connectWebSocket = ({
       stompClient.subscribe('/topic/critical', (message) => {
         try {
           const alert = JSON.parse(message.body)
-          console.log('��� CRITICAL alert received:', alert.anomalyType)
+          console.log('CRITICAL alert received:', alert.anomalyType)
           onCritical?.(alert)
         } catch (e) {
           console.error('Failed to parse critical alert:', e)
@@ -89,7 +89,7 @@ export const connectWebSocket = ({
     // On Disconnected
     // ──────────────────────────────────────────
     onDisconnect: () => {
-      console.log('❌ WebSocket disconnected')
+      console.log(' WebSocket disconnected')
       onDisconnect?.()
     },
 
@@ -114,7 +114,7 @@ export const connectWebSocket = ({
 export const disconnectWebSocket = () => {
   if (stompClient) {
     stompClient.deactivate()
-    console.log('��� WebSocket disconnected cleanly')
+    console.log('WebSocket disconnected cleanly')
   }
 }
 
